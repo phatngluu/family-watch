@@ -1,0 +1,11 @@
+male
+age
+currentSmoker
+diabetes
+totChol
+sysBP
+diaBP
+heartRate
+TenYearCHD
+StepPerDay
+SP02
