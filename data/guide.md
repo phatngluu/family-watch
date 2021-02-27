@@ -1,4 +1,5 @@
 # Import
+Import sẽ không xoá dữ liệu cũ!
 ```
 cd ~/Desktop
 

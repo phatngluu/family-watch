@@ -1,6 +1,7 @@
 import websocket
 import serial
 import time
+from datetime import datetime
 
 # reading and writing data from and to arduino serially.
 # rfcomm0 -> this could be different
@@ -36,10 +37,15 @@ def on_open(ws):
             # write data
             # port.write(str(3)) 
             # data = port.readline()
-            data = "Sample"
+            now = datetime.now().timestamp()
+            # integer: stepCount, heartRate
+            # float: timestamp
+            # string: customerID
+            data = "A00001/801/89/" + str(now)
             if data:
                 print(data)
                 ws.send(data)
+                time.sleep(1)
         time.sleep(1)
         ws.close()
         print("thread terminating...")
