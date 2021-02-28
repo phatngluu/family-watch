@@ -5,34 +5,13 @@ const { DBConnection, UserData } = require('./database.js');
 const wss = new WebSocket.Server({ port: 8080 })
 let tempDataMap = new Map();
 
-wss.on('connection', ws => {
-    ws.on('message', message => {
-        console.log(`Received message => ${message}`)
-        let [customerID, stepCount, heartRate, timestamp] = message.split('/')
-        stepCount = parseInt(stepCount)
-        heartRate = parseInt(heartRate)
-        timestamp = parseFloat(timestamp)
-
-        if (tempDataMap.has(customerID)) {
-            let prevHeartRate = tempDataMap.get(customerID).heartRate
-            heartRate = Math.round((heartRate + prevHeartRate) / 2)
-        }
-        tempDataMap.set(customerID, {
-            customerID,
-            stepCount,
-            heartRate,
-            timestamp
-        })
-    })
-    ws.send('ho!')
-})
-
 /** DB Connection */
 DBConnection.on('error', console.error.bind(console, 'Database connection error:'))
 DBConnection.once('open', () => {
     console.log('Database connected.')
     setInterval(() => {
-        tempDataMap.forEach( async (key, element) => {
+        tempDataMap.forEach( async (element, key) => {
+            console.log(element);
             const userDataModel = new UserData({
                 customerID: element.customerID,
                 male: 0,
@@ -59,3 +38,25 @@ DBConnection.once('open', () => {
     }, parseInt(process.env.DB_TIME_SEND))
 })
 
+
+wss.on('connection', ws => {
+    ws.on('message', message => {
+        console.log(`Received message => ${message}`)
+        let [customerID, stepCount, heartRate, timestamp] = message.split('/')
+        stepCount = parseInt(stepCount)
+        heartRate = parseInt(heartRate)
+        timestamp = Date(Math.round(parseFloat(timestamp)))
+
+        if (tempDataMap.has(customerID)) {
+            let prevHeartRate = tempDataMap.get(customerID).heartRate
+            heartRate = Math.round((heartRate + prevHeartRate) / 2)
+        }
+        tempDataMap.set(customerID, {
+            customerID,
+            stepCount,
+            heartRate,
+            timestamp
+        })
+    })
+    ws.send('ho!')
+})

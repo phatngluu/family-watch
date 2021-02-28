@@ -19,7 +19,7 @@ const fileSchema = new mongoose.Schema({
     TenYearCHD: Number,
     StepPerDay: Number,
     SP02: Number,
-    timestamp: {type: Date, default: Date.now}
+    timestamp: Date,
 });
 
 const UserData = mongoose.model('UserData', fileSchema);
