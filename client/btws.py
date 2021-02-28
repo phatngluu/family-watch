@@ -5,7 +5,7 @@ from datetime import datetime
 
 # reading and writing data from and to arduino serially.
 # rfcomm0 -> this could be different
-port = serial.Serial("/dev/rfcomm0", baudrate=38400)
+# port = serial.Serial("/dev/rfcomm0", baudrate=38400)
 
 try:
     import thread
